@@ -16,8 +16,18 @@ exports.getCategories = async (req, res) => {
 
 // Edit Category
 exports.editCategory = async (req, res) => {
-  const category = await Category.findById(req.params.id);
-  res.render("categories/edit", { category });
+  try {
+    const categoryId = req.params.id;
+    const category = await Category.findById(categoryId);
+
+    if (!category) {
+      return res.status(404).send("Category not found");
+    }
+
+    res.render("categories/edit", { category });
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 };
 
 // Update Category
